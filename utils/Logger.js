@@ -5,16 +5,41 @@ class Logger {
     if (Logger.instance == null) {
       Logger.instance = this;
     }
+    this.emoji = {
+      new: String.fromCodePoint(0x2694),
+      attack: String.fromCodePoint(0x1f525),
+      death: String.fromCodePoint(0x1f480),
+      winner: String.fromCodePoint(0x26a1),
+    };
     return Logger.instance;
   }
 
-  writeLog(message) {
-    /* fs.writeFile("log.txt", message, function (err) {
-      if (err) return console.log(err);
-      console.log(`${message} > log.txt`);
-    });*/
+  log(message, emoji) {
+    let myEmoji;
+    switch (emoji) {
+      case "new":
+        myEmoji = this.emoji.new;
 
-    console.log(message);
+        break;
+      case "attack":
+        myEmoji = this.emoji.attack;
+
+        break;
+      case "death":
+        myEmoji = this.emoji.death;
+
+        break;
+      case "winner":
+        myEmoji = this.emoji.winner;
+
+        break;
+
+      default:
+        myEmoji = "";
+        break;
+    }
+
+    return console.log(`${myEmoji} ${message}`);
   }
 }
 
