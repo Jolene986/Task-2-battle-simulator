@@ -1,0 +1,19 @@
+{
+  "name": "task-2-battle-simulator",
+  "version": "1.0.0",
+  "description": "Second task for React developer test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jolene986/Task-2-battle-simulator.git"
+  },
+  "author": "Jovana Jovanovic Jolene986",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jolene986/Task-2-battle-simulator/issues"
+  },
+  "homepage": "https://github.com/Jolene986/Task-2-battle-simulator#readme"
+}
