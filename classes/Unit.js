@@ -12,6 +12,7 @@ export default class Unit {
     this.rechargeTime;
     this.timer;
     this.opponent = {};
+    
 
     logger.log(`The ${this.name} has just been created`, "new");
   }
@@ -21,17 +22,18 @@ export default class Unit {
     if (this.health <= 0) {
       logger.log(`${this.name} is dead!`, "death");
     }
-    console.log(`iz set helth helth ${this.health}`);
   }
   // set damage
   setDamage() {
-    return (this.damage = this.health / 100);
+   this.damage = this.health / 100
+   return this.damage;
+   
+    
+    
   }
 
   // set critical
-  setCritical(opponentHealth) {
-    return (this.critical = 10 - (opponentHealth / 10) * config.criticalFactor);
-  }
+
 
   //set rechargeTime
   setTime() {
@@ -39,7 +41,7 @@ export default class Unit {
   }
 
   recharging() {
-    console.log(`RECHARGE FUNC`);
+    
     if (this.health <= 0) {
       return;
     }
@@ -49,7 +51,7 @@ export default class Unit {
     }
     this.setTime();
     this.timer = setTimeout(() => {
-      console.log(`Vreme tajmera ${this.rechargeTime} `);
+      
       this.attackRandomOpponent();
     }, this.rechargeTime);
   }
@@ -60,7 +62,7 @@ export default class Unit {
   }
 
   attackRandomOpponent() {
-    console.log(`ATTACK FUNCTION`);
+    
 
     // is this unit dead
     if (this.health <= 0) {
@@ -77,8 +79,8 @@ export default class Unit {
 
     // svejedno pozivamo this.recharge
 
-    console.log(`KRAJ ATTACKA`);
-    console.log(` units niz je sada ${units}`);
+    
+    console.log(`Number of survivors: ${units.length}`);
     this.recharging();
   }
 
@@ -100,37 +102,54 @@ export default class Unit {
       this.selectOpponent();
       return;
     }
-    console.log(`Napadac je je ${this.name}`);
-    console.log(`opponent je ${opponent.name}`);
+    console.log(`Attacker is ${this.name} width ${this.health.toFixed(2)} life remaining`);
+    console.log(`Opponent is ${opponent.name} width ${opponent.health.toFixed(2)} life remaining`);
 
     return (this.opponent = opponent);
   }
 
   doDamage() {
-    console.log(`DO DAMAGE FUNC i opponent je ${this.opponent.name}`);
+    
 
     logger.log(`${this.name} is ATTACKING ${this.opponent.name}`, "attack");
 
     // calculate critical chance and set Critical Damage
-    if (randomGenerator(101) >= 50) {
-      this.setCritical(this.opponent.health);
-    }
-    let damage = this.damage + this.criticalDamage + 20;
-    console.log(`CRITICAL ${this.criticalDamage}`);
-    this.opponent.setHealth(this.opponent.health - damage);
+    // if (randomGenerator(101) >= 50) {
+    
+    
+
+let critical = (10 - (this.opponent.health / 10)) * config.criticalFactor; 
+
+this.criticalDamage = critical;
+
+
+
+
+
+
+
+ 
+
+
+    this.setDamage(); 
+    let damage = this.damage;
+    let totalDamage = parseFloat(damage) + this.criticalDamage;
+ 
+
+
+    this.opponent.setHealth(this.opponent.health - totalDamage);
     logger.log(
-      `${String.fromCodePoint(0x26a1)} Critical Damage:${this.criticalDamage}`
+      `${String.fromCodePoint(0x26a1)} Critical Damage:${this.criticalDamage} and regular damage is ${this.damage}`
     );
-    logger.log(` Total Damage inflicted :${damage} `);
+    logger.log(`Total Damage inflicted: ${totalDamage}`);
   }
   checkIfDead() {
     // if dead splice i stop opponent timer
     if (this.opponent.health <= 0) {
       let idx = units.findIndex((item) => item.health <= 0);
-      console.log(`index je ${idx}`);
+      
       if (idx !== -1) {
-        console.log(`usao u if za dead opponent`);
-        console.log(`iz ded ifa ${units[0].name}`);
+        
         units.splice(idx, 1);
       }
       this.opponent.stopTimer();
@@ -148,8 +167,5 @@ export default class Unit {
     let survivors = [...units];
 
     return survivors;
-  }
-  test() {
-    console.log("test");
   }
 }
