@@ -9,7 +9,7 @@ class Logger {
       new: String.fromCodePoint(0x2694),
       attack: String.fromCodePoint(0x1f525),
       death: String.fromCodePoint(0x1f480),
-      winner: String.fromCodePoint(0x26a1),
+      winner: String.fromCodePoint(0x1f3c6),
     };
     return Logger.instance;
   }

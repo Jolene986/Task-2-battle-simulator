@@ -11,7 +11,7 @@ export default class Unit {
     this.criticalDamage = 0;
     this.rechargeTime;
     this.timer;
-    this.oponent = {};
+    this.opponent = {};
 
     logger.log(`The ${this.name} has just been created`, "new");
   }
@@ -29,8 +29,8 @@ export default class Unit {
   }
 
   // set critical
-  setCritical(oponentHealth) {
-    return (this.critical = 10 - (oponentHealth / 10) * config.n);
+  setCritical(opponentHealth) {
+    return (this.critical = 10 - (opponentHealth / 10) * config.criticalFactor);
   }
 
   //set rechargeTime
@@ -50,7 +50,7 @@ export default class Unit {
     this.setTime();
     this.timer = setTimeout(() => {
       console.log(`Vreme tajmera ${this.rechargeTime} `);
-      this.attackRandomOponent();
+      this.attackRandomOpponent();
     }, this.rechargeTime);
   }
 
@@ -59,20 +59,20 @@ export default class Unit {
     console.log(`${this.name} tajmer je stopiran`);
   }
 
-  attackRandomOponent() {
+  attackRandomOpponent() {
     console.log(`ATTACK FUNCTION`);
 
     // is this unit dead
     if (this.health <= 0) {
       return;
     }
-    //select random oponent
-    this.selectOponent();
+    //select random opponent
+    this.selectOpponent();
 
-    // attack oponent
+    // attack opponent
     this.doDamage();
 
-    //check if oponent dead
+    //check if opponent dead
     this.checkIfDead();
 
     // svejedno pozivamo this.recharge
@@ -82,55 +82,58 @@ export default class Unit {
     this.recharging();
   }
 
-  selectOponent() {
+  selectOpponent() {
     if (units.length === 1) {
       logger.log(`WINNER IS ${units[0].name}`, "winner");
 
       return;
     }
 
-    let oponent = units[randomGenerator(units.length)];
-    if (this.name === oponent.name) {
-      this.selectOponent();
+    let opponent = units[randomGenerator(units.length)];
+    if (this.name === opponent.name) {
+      this.selectOpponent();
       return;
     }
-    //check if oponent already dead jer dok smo mi randomovali neko drugi ga je mogao ubiti
+    //check if opponent already dead because during the random opponent finding some other unit could kill it
 
-    if (oponent.health <= 0) {
-      this.selectOponent();
+    if (opponent.health <= 0) {
+      this.selectOpponent();
       return;
     }
     console.log(`Napadac je je ${this.name}`);
-    console.log(`oponent je ${oponent.name}`);
+    console.log(`opponent je ${opponent.name}`);
 
-    return (this.oponent = oponent);
+    return (this.opponent = opponent);
   }
 
   doDamage() {
-    console.log(`DO DAMAGE FUNC i oponent je ${this.oponent.name}`);
+    console.log(`DO DAMAGE FUNC i opponent je ${this.opponent.name}`);
 
-    logger.log(`${this.name} is ATTACKING ${this.oponent.name}`, "attack");
+    logger.log(`${this.name} is ATTACKING ${this.opponent.name}`, "attack");
 
     // calculate critical chance and set Critical Damage
-    // if (randomGenerator(101) >= 50) {
-    //   this.setCritical(oponent.health);
-    // }
-    let damage = this.damage + this.criticalDamage;
-    this.oponent.setHealth(this.oponent.health - damage);
-    logger.log(` Critical Damage:${this.criticalDamage} `);
+    if (randomGenerator(101) >= 50) {
+      this.setCritical(this.opponent.health);
+    }
+    let damage = this.damage + this.criticalDamage + 20;
+    console.log(`CRITICAL ${this.criticalDamage}`);
+    this.opponent.setHealth(this.opponent.health - damage);
+    logger.log(
+      `${String.fromCodePoint(0x26a1)} Critical Damage:${this.criticalDamage}`
+    );
     logger.log(` Total Damage inflicted :${damage} `);
   }
   checkIfDead() {
-    // if dead splice i stop oponent timer
-    if (this.oponent.health <= 0) {
+    // if dead splice i stop opponent timer
+    if (this.opponent.health <= 0) {
       let idx = units.findIndex((item) => item.health <= 0);
       console.log(`index je ${idx}`);
       if (idx !== -1) {
-        console.log(`usao u if za dead oponent`);
+        console.log(`usao u if za dead opponent`);
         console.log(`iz ded ifa ${units[0].name}`);
         units.splice(idx, 1);
       }
-      this.oponent.stopTimer();
+      this.opponent.stopTimer();
     }
   }
 
