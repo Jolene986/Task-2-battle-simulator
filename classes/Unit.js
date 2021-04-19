@@ -58,7 +58,7 @@ export default class Unit {
 
   stopTimer() {
     this.health === 0 && clearTimeout(this.timer);
-    console.log(`${this.name} tajmer je stopiran`);
+    
   }
 
   attackRandomOpponent() {
@@ -80,7 +80,7 @@ export default class Unit {
     // svejedno pozivamo this.recharge
 
     
-    console.log(`Number of survivors: ${units.length}`);
+    logger.log(`Number of survivors: ${units.length}`);
     this.recharging();
   }
 
@@ -102,8 +102,8 @@ export default class Unit {
       this.selectOpponent();
       return;
     }
-    console.log(`Attacker is ${this.name} width ${this.health.toFixed(2)} life remaining`);
-    console.log(`Opponent is ${opponent.name} width ${opponent.health.toFixed(2)} life remaining`);
+    logger.log(`Attacker is ${this.name} width ${this.health.toFixed(2)} life remaining`);
+    logger.log(`Opponent is ${opponent.name} width ${opponent.health.toFixed(2)} life remaining`);
 
     return (this.opponent = opponent);
   }
@@ -112,24 +112,13 @@ export default class Unit {
     
 
     logger.log(`${this.name} is ATTACKING ${this.opponent.name}`, "attack");
-
+let critical = 0
     // calculate critical chance and set Critical Damage
-    // if (randomGenerator(101) >= 50) {
+    if(randomGenerator(101) >= 50){
+      critical = (10 - (this.opponent.health / 10)) * config.criticalFactor; 
+    } 
     
-    
-
-let critical = (10 - (this.opponent.health / 10)) * config.criticalFactor; 
-
 this.criticalDamage = critical;
-
-
-
-
-
-
-
- 
-
 
     this.setDamage(); 
     let damage = this.damage;
